@@ -46,6 +46,7 @@ console.log(operate(firstNumber, secondNumber, userOperator));
 
 // Getting DOM Elements
 let calculatorScreen = document.querySelector(".calculator_display_input")
+let calculatorText = calculatorScreen.textContent
 calculatorScreen.textContent = ''
 let calculatorButtons = document.querySelectorAll('.calculator_body_btn')
 let calculatorOperator = document.querySelector('.calculator_display_operator')
@@ -57,12 +58,14 @@ let calculatorOperator = document.querySelector('.calculator_display_operator')
 // Getting btn values
 calculatorButtons.forEach(calculatorButton => {
     calculatorButton.addEventListener("click", () => {
+        // First number input
         if (!isNaN(parseInt(calculatorButton.textContent)) && firstIsDefined == false){
         let currentScreen = calculatorScreen.textContent + calculatorButton.textContent
         calculatorScreen.textContent = currentScreen
         firstNumber = parseInt(currentScreen)
         console.log(currentScreen);  
 
+        // Operator input
     } else if (operators.includes(calculatorButton.textContent)) {
         if(secondIsDefined === true) {
             let finalResult = operate(firstNumber, secondNumber, userOperator)
@@ -74,7 +77,7 @@ calculatorButtons.forEach(calculatorButton => {
         userOperator = calculatorButton.textContent;
         firstIsDefined = true
         shouldClear = true
-
+        // Second operand input
     } else if (!isNaN(parseInt(calculatorButton.textContent)) && firstIsDefined == true){
         if (shouldClear === true){
             calculatorScreen.textContent = ""
@@ -84,7 +87,8 @@ calculatorButtons.forEach(calculatorButton => {
         calculatorScreen.textContent = currentScreen;
         secondNumber = parseInt(currentScreen);  
         secondIsDefined = true
-   
+        
+        // Output login
     } else if (calculatorButton.textContent === "="){
        let finalResult = operate(firstNumber, secondNumber, userOperator)
        calculatorScreen.textContent = finalResult
@@ -93,6 +97,7 @@ calculatorButtons.forEach(calculatorButton => {
        firstIsDefined = false
        secondIsDefined = false
 
+        // Rest logic   
     } else if (calculatorButton.textContent == "AC"){
         firstNumber = ''
         secondNumber = ''
