@@ -132,6 +132,10 @@ calculatorButtons.forEach(calculatorButton => {
         return
         }
 
+        if(calculatorScreen.textContent === "Error") {
+            calculatorScreen.textContent = '0.'
+        }
+
         if(calculatorScreen.textContent.includes(".")) {
             return
         } else {
@@ -140,24 +144,34 @@ calculatorButtons.forEach(calculatorButton => {
         } 
 
     } else if (calculatorButton.textContent === 'del') {
-        let currentScreen = calculatorScreen.textContent.slice(0, -1)
-        calculatorScreen.textContent = currentScreen
-        if (firstIsDefined === false) {
-            if(currentScreen === '') {
-                firstNumber = 0
-                calculatorScreen.textContent = '0'
-            } else {
-            firstNumber = parseFloat(currentScreen)
-            }
+        if(calculatorScreen.textContent === 'Error') {
+            firstNumber = ''
+            secondNumber = ''
+            userOperator = ''
+            calculatorOperator.textContent = ''
+            firstIsDefined = false;
+            shouldClear = false;
+            calculatorScreen.textContent = "0"
         } else {
-            if (currentScreen === ''){
-                secondNumber = 0
-                calculatorScreen.textContent = '0'
-            } else { 
-            secondNumber = parseFloat(currentScreen)
+            let currentScreen = calculatorScreen.textContent.slice(0, -1)
+            calculatorScreen.textContent = currentScreen
+     
+            if (firstIsDefined === false) {
+                if(currentScreen === '') {
+                    firstNumber = 0
+                    calculatorScreen.textContent = '0'
+                } else {
+                    firstNumber = parseFloat(currentScreen)
+                }
+            } else {
+                if (currentScreen === ''){
+                    secondNumber = 0
+                    calculatorScreen.textContent = '0'
+                } else { 
+                    secondNumber = parseFloat(currentScreen)
+                }
             }
-        }
-    }})
+    }}})
 })
 
 
