@@ -1,22 +1,32 @@
 //Basic functions
+
 // add
 function add(n1, n2) {
-   return n1 + n2;
+    const answer = n1 + n2
+    const decimals = answer.toString().split(".")[1]?.length || 0;
+    return decimals > 8 ? Number(answer.toFixed(4)) : answer
 }
 
 // subtract
 function subtract(n1, n2) {
-   return n1 - n2;
+    const answer = n1 - n2
+    const decimals = answer.toString().split(".")[1]?.length || 0;
+    return decimals > 8 ? Number(answer.toFixed(4)) : answer
 }
 
 // multiply
 function multiply(n1, n2) {
-    return n1 * n2;
+    const answer = n1 * n2
+    const decimals = answer.toString().split(".")[1]?.length || 0;
+    return decimals > 8 ? Number(answer.toFixed(4)) : answer
 }
 
 // divide
 function divide(n1, n2) {
-  return n1 / n2;
+    if (n2 === 0) return "Error"
+    const answer = n1 / n2
+    const decimals = answer.toString().split(".")[1]?.length || 0;
+    return decimals > 8 ? Number(answer.toFixed(4)) : answer
 }
 
 // declaring variables
@@ -42,12 +52,9 @@ function operate(firstOperand, secondOperand, operator) {
 }
 
 
-console.log(operate(firstNumber, secondNumber, userOperator));
-
 // Getting DOM Elements
 let calculatorScreen = document.querySelector(".calculator_display_input")
-let calculatorText = calculatorScreen.textContent
-calculatorScreen.textContent = ''
+calculatorScreen.textContent = 0
 let calculatorButtons = document.querySelectorAll('.calculator_body_btn')
 let calculatorOperator = document.querySelector('.calculator_display_operator')
 
@@ -55,28 +62,33 @@ let calculatorOperator = document.querySelector('.calculator_display_operator')
 
     
 
-// Getting btn values
+// Getting btn values and calculator logic
 calculatorButtons.forEach(calculatorButton => {
     calculatorButton.addEventListener("click", () => {
-        // First number input
+        // First operand input
         if (!isNaN(parseInt(calculatorButton.textContent)) && firstIsDefined == false){
+         if (calculatorScreen.textContent === "0" || calculatorScreen.textContent === "Error"){
+            calculatorScreen.textContent = ''
+         }
         let currentScreen = calculatorScreen.textContent + calculatorButton.textContent
         calculatorScreen.textContent = currentScreen
-        firstNumber = parseInt(currentScreen)
-        console.log(currentScreen);  
+        firstNumber = parseFloat(currentScreen)
 
         // Operator input
     } else if (operators.includes(calculatorButton.textContent)) {
+        if (calculatorScreen.textContent === '0' && firstIsDefined === false) firstNumber = parseInt(calculatorScreen.textContent)
+        
         if(secondIsDefined === true) {
             let finalResult = operate(firstNumber, secondNumber, userOperator)
             calculatorScreen.textContent = finalResult
             firstNumber = finalResult;
             secondIsDefined = false
-        }
+        } 
         calculatorOperator.textContent = calculatorButton.textContent
         userOperator = calculatorButton.textContent;
         firstIsDefined = true
         shouldClear = true
+        
         // Second operand input
     } else if (!isNaN(parseInt(calculatorButton.textContent)) && firstIsDefined == true){
         if (shouldClear === true){
@@ -85,19 +97,24 @@ calculatorButtons.forEach(calculatorButton => {
         }
         let currentScreen = calculatorScreen.textContent + calculatorButton.textContent
         calculatorScreen.textContent = currentScreen;
-        secondNumber = parseInt(currentScreen);  
+        secondNumber = parseFloat(currentScreen);  
         secondIsDefined = true
         
-        // Output login
+        // Output logic
     } else if (calculatorButton.textContent === "="){
        let finalResult = operate(firstNumber, secondNumber, userOperator)
        calculatorScreen.textContent = finalResult
+       if (calculatorScreen.textContent === 'Error') {
+        firstIsDefined = false
+        calculatorOperator.textContent = ''
+        firstNumber = 0
+        secondIsDefined = false
+       } else {
        firstNumber = finalResult;
        calculatorOperator.textContent = ''
-       firstIsDefined = false
        secondIsDefined = false
-
-        // Rest logic   
+        }
+        // Reset logic   
     } else if (calculatorButton.textContent == "AC"){
         firstNumber = ''
         secondNumber = ''
@@ -105,8 +122,41 @@ calculatorButtons.forEach(calculatorButton => {
         calculatorOperator.textContent = ''
         firstIsDefined = false;
         shouldClear = false;
-        calculatorScreen.textContent = ""
+        calculatorScreen.textContent = "0"
 
+    } else if(calculatorButton.textContent === '.') {
+
+        if (shouldClear) {
+        calculatorScreen.textContent = '0.'
+        shouldClear = false // Turn off the alert!
+        return
+        }
+
+        if(calculatorScreen.textContent.includes(".")) {
+            return
+        } else {
+        let currentScreen = calculatorScreen.textContent + calculatorButton.textContent
+        calculatorScreen.textContent = currentScreen
+        } 
+
+    } else if (calculatorButton.textContent === 'del') {
+        let currentScreen = calculatorScreen.textContent.slice(0, -1)
+        calculatorScreen.textContent = currentScreen
+        if (firstIsDefined === false) {
+            if(currentScreen === '') {
+                firstNumber = 0
+                calculatorScreen.textContent = '0'
+            } else {
+            firstNumber = parseFloat(currentScreen)
+            }
+        } else {
+            if (currentScreen === ''){
+                secondNumber = 0
+                calculatorScreen.textContent = '0'
+            } else { 
+            secondNumber = parseFloat(currentScreen)
+            }
+        }
     }})
 })
 

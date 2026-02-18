@@ -73,3 +73,7 @@
 .calculator_body_btn:hover {
     background-color: rgb(196, 196, 196);
 }
+
+.calculator_display_input {
+    height: 100%;
+}
