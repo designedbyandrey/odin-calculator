@@ -128,7 +128,7 @@ calculatorButtons.forEach(calculatorButton => {
 
         if (shouldClear) {
         calculatorScreen.textContent = '0.'
-        shouldClear = false // Turn off the alert!
+        shouldClear = false 
         return
         }
 
