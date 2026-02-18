@@ -173,13 +173,3 @@ calculatorButtons.forEach(calculatorButton => {
             }
     }}})
 })
-
-
-
-
-
-// 1. Get element (button)
-// 2. Make the element take the value of the btn till an operator is clicked 
-// and update the variable 
-// 3. reflect the change on the screen of the calculator
-// 4. 
